@@ -71,6 +71,16 @@ export const useStakeProgram = () => {
           // Bump (1 byte)
           const bump = data[offset];
           
+          console.log('Stake Account Data:', {
+            owner: owner.toString(),
+            stakedAmount: stakedAmount / LAMPORTS_PER_SOL,
+            totalPoints,
+            lastUpdatedTime: new Date(lastUpdatedTime * 1000),
+            currentTime: new Date(),
+            timeElapsed: (Date.now() / 1000) - lastUpdatedTime,
+            bump,
+          });
+          
           setStakeAccount({
             owner,
             stakedAmount,
