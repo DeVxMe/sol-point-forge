@@ -35,20 +35,51 @@ export const useStakeProgram = () => {
   }, [publicKey]);
 
   const fetchStakeAccount = useCallback(async () => {
-    if (!connection || !pdaAccount || !publicKey) return;
+    if (!connection || !pdaAccount || !publicKey || !program) return;
     
     setRefreshing(true);
     try {
       const accountInfo = await connection.getAccountInfo(pdaAccount);
-      if (accountInfo && accountInfo.data) {
-        // For now, we'll just set a placeholder - we'll implement proper deserialization later
-        setStakeAccount({
-          owner: publicKey,
-          stakedAmount: 0,
-          totalPoints: 0,
-          lastUpdatedTime: Date.now() / 1000,
-          bump: 0,
-        });
+      if (accountInfo && accountInfo.data && accountInfo.data.length > 0) {
+        // Manually decode the account data based on the struct layout
+        // Skip 8-byte discriminator, then read: pubkey(32) + u64(8) + u64(8) + u64(8) + u8(1)
+        const data = accountInfo.data;
+        if (data.length >= 8 + 32 + 8 + 8 + 8 + 1) {
+          let offset = 8; // Skip discriminator
+          
+          // Owner pubkey (32 bytes)
+          const ownerBytes = data.slice(offset, offset + 32);
+          const owner = new PublicKey(ownerBytes);
+          offset += 32;
+          
+          // Staked amount (8 bytes, little endian u64)
+          const stakedAmountBytes = data.slice(offset, offset + 8);
+          const stakedAmount = new BN(stakedAmountBytes, 'le').toNumber();
+          offset += 8;
+          
+          // Total points (8 bytes, little endian u64)
+          const totalPointsBytes = data.slice(offset, offset + 8);
+          const totalPoints = new BN(totalPointsBytes, 'le').toNumber();
+          offset += 8;
+          
+          // Last updated time (8 bytes, little endian u64)
+          const lastUpdatedTimeBytes = data.slice(offset, offset + 8);
+          const lastUpdatedTime = new BN(lastUpdatedTimeBytes, 'le').toNumber();
+          offset += 8;
+          
+          // Bump (1 byte)
+          const bump = data[offset];
+          
+          setStakeAccount({
+            owner,
+            stakedAmount,
+            totalPoints,
+            lastUpdatedTime,
+            bump,
+          });
+        } else {
+          setStakeAccount(null);
+        }
       } else {
         setStakeAccount(null);
       }
@@ -58,7 +89,7 @@ export const useStakeProgram = () => {
     } finally {
       setRefreshing(false);
     }
-  }, [connection, pdaAccount, publicKey]);
+  }, [connection, pdaAccount, publicKey, program]);
 
   const createPdaAccount = useCallback(async () => {
     if (!program || !publicKey || !pdaAccount) return;
