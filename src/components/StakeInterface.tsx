@@ -8,12 +8,13 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { useStakeProgram } from '@/hooks/useStakeProgram';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { Loader2, Coins, TrendingUp, Gift, Zap } from 'lucide-react';
+import { Loader2, Coins, TrendingUp, Gift, Zap, Wallet } from 'lucide-react';
 
 export const StakeInterface = () => {
   const { connected } = useWallet();
   const {
     stakeAccount,
+    walletBalance,
     stakedSOL,
     claimablePoints,
     isAccountInitialized,
@@ -24,6 +25,7 @@ export const StakeInterface = () => {
     unstake,
     claimPoints,
     fetchStakeAccount,
+    fetchWalletBalance,
   } = useStakeProgram();
 
   const [stakeAmount, setStakeAmount] = useState('');
@@ -123,11 +125,11 @@ export const StakeInterface = () => {
         <Card className="bg-card/50 backdrop-blur-sm border-border/50 shadow-card">
           <CardContent className="p-6">
             <div className="flex items-center space-x-2">
-              <Gift className="h-5 w-5 text-solana-purple" />
+              <Wallet className="h-5 w-5 text-solana-purple" />
               <div>
-                <p className="text-sm font-medium text-muted-foreground">SOL Value</p>
+                <p className="text-sm font-medium text-muted-foreground">Wallet Balance</p>
                 <p className="text-2xl font-bold text-foreground">
-                  {(claimablePoints / 1000).toFixed(4)}
+                  {walletBalance.toFixed(4)} SOL
                 </p>
               </div>
             </div>
@@ -271,7 +273,10 @@ export const StakeInterface = () => {
             <Button
               variant="ghost"
               size="sm"
-              onClick={fetchStakeAccount}
+              onClick={() => {
+                fetchStakeAccount();
+                fetchWalletBalance();
+              }}
               disabled={refreshing}
             >
               {refreshing ? (

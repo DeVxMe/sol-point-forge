@@ -12,6 +12,7 @@ export const useStakeProgram = () => {
   const { toast } = useToast();
   
   const [stakeAccount, setStakeAccount] = useState<StakeAccount | null>(null);
+  const [walletBalance, setWalletBalance] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -91,6 +92,18 @@ export const useStakeProgram = () => {
     }
   }, [connection, pdaAccount, publicKey, program]);
 
+  const fetchWalletBalance = useCallback(async () => {
+    if (!connection || !publicKey) return;
+    
+    try {
+      const balance = await connection.getBalance(publicKey);
+      setWalletBalance(balance / LAMPORTS_PER_SOL);
+    } catch (error) {
+      console.log('Failed to fetch wallet balance:', error);
+      setWalletBalance(0);
+    }
+  }, [connection, publicKey]);
+
   const createPdaAccount = useCallback(async () => {
     if (!program || !publicKey || !pdaAccount) return;
     
@@ -111,6 +124,7 @@ export const useStakeProgram = () => {
       });
       
       await fetchStakeAccount();
+      await fetchWalletBalance();
     } catch (error: any) {
       toast({
         title: "Error",
@@ -120,7 +134,7 @@ export const useStakeProgram = () => {
     } finally {
       setLoading(false);
     }
-  }, [program, publicKey, pdaAccount, toast, fetchStakeAccount]);
+  }, [program, publicKey, pdaAccount, toast, fetchStakeAccount, fetchWalletBalance]);
 
   const stake = useCallback(async (amount: number) => {
     if (!program || !publicKey || !pdaAccount || amount <= 0) return;
@@ -143,6 +157,7 @@ export const useStakeProgram = () => {
       });
       
       await fetchStakeAccount();
+      await fetchWalletBalance();
     } catch (error: any) {
       toast({
         title: "Error",
@@ -152,7 +167,7 @@ export const useStakeProgram = () => {
     } finally {
       setLoading(false);
     }
-  }, [program, publicKey, pdaAccount, toast, fetchStakeAccount]);
+  }, [program, publicKey, pdaAccount, toast, fetchStakeAccount, fetchWalletBalance]);
 
   const unstake = useCallback(async (amount: number) => {
     if (!program || !publicKey || !pdaAccount || amount <= 0) return;
@@ -175,6 +190,7 @@ export const useStakeProgram = () => {
       });
       
       await fetchStakeAccount();
+      await fetchWalletBalance();
     } catch (error: any) {
       toast({
         title: "Error",
@@ -184,7 +200,7 @@ export const useStakeProgram = () => {
     } finally {
       setLoading(false);
     }
-  }, [program, publicKey, pdaAccount, toast, fetchStakeAccount]);
+  }, [program, publicKey, pdaAccount, toast, fetchStakeAccount, fetchWalletBalance]);
 
   const claimPoints = useCallback(async () => {
     if (!program || !publicKey || !pdaAccount) return;
@@ -207,6 +223,7 @@ export const useStakeProgram = () => {
       });
       
       await fetchStakeAccount();
+      await fetchWalletBalance();
     } catch (error: any) {
       toast({
         title: "Error",
@@ -216,11 +233,12 @@ export const useStakeProgram = () => {
     } finally {
       setLoading(false);
     }
-  }, [program, publicKey, pdaAccount, toast, stakeAccount, fetchStakeAccount]);
+  }, [program, publicKey, pdaAccount, toast, stakeAccount, fetchStakeAccount, fetchWalletBalance]);
 
   useEffect(() => {
     fetchStakeAccount();
-  }, [fetchStakeAccount]);
+    fetchWalletBalance();
+  }, [fetchStakeAccount, fetchWalletBalance]);
 
   const stakedSOL = stakeAccount ? stakeAccount.stakedAmount / LAMPORTS_PER_SOL : 0;
   const claimablePoints = stakeAccount ? Math.floor(stakeAccount.totalPoints / 1_000_000) : 0;
@@ -228,6 +246,7 @@ export const useStakeProgram = () => {
 
   return {
     stakeAccount,
+    walletBalance,
     stakedSOL,
     claimablePoints,
     isAccountInitialized,
@@ -238,5 +257,6 @@ export const useStakeProgram = () => {
     unstake,
     claimPoints,
     fetchStakeAccount,
+    fetchWalletBalance,
   };
 };
