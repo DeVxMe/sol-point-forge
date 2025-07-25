@@ -1,73 +1,58 @@
-# Welcome to your Lovable project
+# SOL Point Forge
 
-## Project info
+Welcome to **SOL Point Forge**!  
+This project is now live at [bimalxstake.vercel.app](https://bimalxstake.vercel.app).
 
-**URL**: https://lovable.dev/projects/e45f3cfb-acd9-4478-8f94-c85474a51e26
+---
 
-## How can I edit this code?
+## 🚀 About the Project
 
-There are several ways of editing your application.
+SOL Point Forge is a decentralized staking and rewards platform built on the Solana blockchain. Users can stake SOL, earn points over time, and claim rewards in SOL based on their accumulated points. The project is designed to be fast, secure, and user-friendly, leveraging the power of Solana's high-performance network.
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/e45f3cfb-acd9-4478-8f94-c85474a51e26) and start prompting.
+## 🌟 Project Qualities
 
-Changes made via Lovable will be committed automatically to this repo.
+- **Decentralized & Trustless:** All staking and reward logic is handled on-chain via Solana smart contracts.
+- **Real-Time Points Accumulation:** Points are calculated in real time based on the amount of SOL staked and the duration.
+- **Transparent Rewards:** Users can claim SOL rewards directly proportional to their earned points.
+- **Secure Transactions:** All transactions use fresh blockhashes and proper error handling to ensure reliability and security.
+- **Responsive UI:** The frontend is built for speed and usability, providing instant feedback and clear information.
+- **Automatic Updates:** Wallet balances and points are refreshed automatically, so users always see up-to-date information.
+- **Error Handling:** Friendly and descriptive error messages guide users through any issues.
 
-**Use your preferred IDE**
+---
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🛠️ Implementation Details
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- **Frontend:** Built with React and TypeScript for a robust and maintainable codebase.
+- **Solana Integration:** Uses the Solana web3.js library for wallet connections, transactions, and on-chain interactions.
+- **Smart Contracts:** Custom Solana programs manage staking, points calculation, and reward distribution.
+- **Points System:**  
+  - 100,000 points = 1 SOL reward  
+  - Minimum 50,000 points required to claim  
+  - Points are earned based on staked SOL and time elapsed
+- **Security:**  
+  - All transactions use fresh blockhashes to prevent replay attacks  
+  - Private keys for reward distribution are securely managed
+- **Deployment:** Hosted on [Vercel](https://vercel.com/) for fast, global access.
 
-Follow these steps:
+---
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## 🌐 Live Demo
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Check out the live app: [bimalxstake.vercel.app](https://bimalxstake.vercel.app)
 
-# Step 3: Install the necessary dependencies.
-npm i
+---
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+## 🙌 Get Started
 
-**Edit a file directly in GitHub**
+1. Connect your Solana wallet.
+2. Stake SOL to start earning points.
+3. Watch your points grow in real time.
+4. Claim your SOL rewards once you reach the minimum points threshold.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+---
 
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/e45f3cfb-acd9-4478-8f94-c85474a51e26) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Thank you for checking out SOL Point Forge!  
+Feel free to try it out and share your feedback.
